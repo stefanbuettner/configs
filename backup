@@ -12,4 +12,4 @@ rsync --verbose --archive --compress --delete-after --delete-excluded\
     --exclude '.steam'\
     --exclude '*SiSi_Highway*'\
     --exclude '*.swp'\
- $HOME/ /data/hdd1/sb/backup
+ $HOME/ /data/hdd1/$USER/backup
