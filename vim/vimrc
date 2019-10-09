@@ -38,6 +38,13 @@ filetype plugin indent on    " required
 " Some default config file for YouCompleteMe
 let g:ycm_global_ycm_extra_conf="~/.vim/.ycm_extra_conf.py"
 
+" enable filetype detection
+filetype on
+filetype plugin on
+filetype indent on " filetype based indentation
+
+autocmd FileType make set noexpandtab
+
 syntax on
 set background=dark
 colorscheme dracula
