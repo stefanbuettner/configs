@@ -33,10 +33,12 @@ SETUP_I3=false
 function setup_i3 {
   if [ $SETUP_I3 == true ]; then
     if backup ${HOME}/.config/i3/config; then
+	mkdir -p ${HOME}/.config/i3
         ln -s ${SCRIPT_DIR}/i3/i3-config ${HOME}/.config/i3/config
     fi
 
     if backup ${HOME}/.config/i3status/config; then
+	mkdir -p ${HOME}/.config/i3status
         ln -s ${SCRIPT_DIR}/i3/i3status-config ${HOME}/.config/i3status/config
     fi
   fi
