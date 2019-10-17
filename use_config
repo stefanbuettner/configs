@@ -104,11 +104,22 @@ function setup_git {
 }
 
 function print_help {
-    echo "$0 program"
+    echo "$0 [config [config...]] [-h | --help]"
     echo ""
     echo "Creates symbolic links for the chosen programs from your home to the configuration files in this repository."
     echo ""
-    echo "  program - One or more of: vim, i3, i3-neo, powerline, git"
+    echo "Config:"
+    echo "  vim"
+    echo "  i3"
+    echo "  i3-neo"
+    echo "  powerline"
+    echo "    Sets up the powerline-status and powerline-gitstatus python2"
+    echo "    packages which provide a pretty command line."
+    echo "  git"
+    echo "    Only adds my tree alias without modifying other git options."
+    echo ""
+    echo "Optional arguments:"
+    echo "  -h --help  Show this help."
     echo ""
 }
 
