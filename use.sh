@@ -50,17 +50,19 @@ function setup_i3 {
 }
 
 # Setup powerline
+SETUP_POWERLINE=false
 function setup_powerline {
-  # Check if powerline was already setup
-  while read -r line
-  do
-      if (echo "$line" | grep --quiet "powerline-daemon"); then
-          SETUP_POWERLINE=false
-          echo "Powerline is already installed"
-          break
-      fi
-  done < "${HOME}/.bashrc"
   if [ $SETUP_POWERLINE == true ]; then
+      # Check if powerline was already setup
+      while read -r line
+      do
+          if (echo "$line" | grep --quiet "powerline-daemon"); then
+              SETUP_POWERLINE=false
+              echo "Powerline is already installed"
+              return 0
+          fi
+      done < "${HOME}/.bashrc"
+
       pip2 install powerline-status powerline-gitstatus
       if [ $? -ne 0 ]; then
           echo "Failed to setup powerline"
@@ -88,12 +90,20 @@ function setup_powerline {
   fi
 }
 
+# Setup git
+SETUP_GIT=false
+function setup_git {
+    if [ $SETUP_GIT == true ]; then
+        git config --global alias.tree "log --graph --pretty=format:'%C(auto)%h %d %s %C(blue)%aN %C(yellow)%G? %C(white)%cr%C(auto)'"
+    fi
+}
+
 function print_help {
     echo "$0 program"
     echo ""
     echo "Creates symbolic links for the chosen programs from your home to the configuration files in this repository."
     echo ""
-    echo "  program - One or more of: vim, i3"
+    echo "  program - One or more of: vim, i3, i3-neo, powerline, git"
     echo ""
 }
 
@@ -117,6 +127,9 @@ do
         powerline)
             SETUP_POWERLINE=true
         ;;
+        git)
+            SETUP_GIT=true
+        ;;
 		*)
 			echo "Unknown parameter '$1'. Try --help for more information."
 		exit 1
@@ -132,3 +145,4 @@ fi
 setup_vim
 setup_i3
 setup_powerline
+setup_git
