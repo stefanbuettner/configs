@@ -30,8 +30,13 @@ function setup_vim {
 
 # Setup i3
 SETUP_I3=false
+I3_NEO=false
 function setup_i3 {
   if [ $SETUP_I3 == true ]; then
+    I3_CONFIG=${SCRIPT_DIR}/i3/i3-config
+    if [ $I3_NEO == true ]; then
+        I3_CONFIG=${I3_CONFIG}-neo
+    fi
     if backup ${HOME}/.config/i3/config; then
 	mkdir -p ${HOME}/.config/i3
         ln -s ${SCRIPT_DIR}/i3/i3-config ${HOME}/.config/i3/config
@@ -104,6 +109,10 @@ do
 		;;
         i3)
             SETUP_I3=true
+        ;;
+        i3-neo)
+            SETUP_I3=true
+            I3_NEO=true
         ;;
         powerline)
             SETUP_POWERLINE=true
