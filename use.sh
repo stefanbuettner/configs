@@ -37,15 +37,20 @@ function setup_i3 {
     if [ $I3_NEO == true ]; then
         I3_CONFIG=${I3_CONFIG}-neo
     fi
-    if backup ${HOME}/.config/i3/config; then
+    backup ${HOME}/.config/i3/config
 	mkdir -p ${HOME}/.config/i3
-        ln -s ${SCRIPT_DIR}/i3/i3-config ${HOME}/.config/i3/config
+    # Assume, that if the config is a link, we set it up.
+    # Delete it and create it anew to be able to switch configurations
+    if [ -L ${HOME}/.config/i3/config ]; then
+        rm ${HOME}/.config/i3/config
     fi
+    ln -s ${I3_CONFIG} ${HOME}/.config/i3/config
 
     if backup ${HOME}/.config/i3status/config; then
-	mkdir -p ${HOME}/.config/i3status
+	    mkdir -p ${HOME}/.config/i3status
         ln -s ${SCRIPT_DIR}/i3/i3status-config ${HOME}/.config/i3status/config
     fi
+    i3-msg --quiet reload
   fi
 }
 
