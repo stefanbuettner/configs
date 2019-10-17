@@ -30,16 +30,72 @@ function setup_vim {
 
 # Setup i3
 SETUP_I3=false
+I3_NEO=false
 function setup_i3 {
   if [ $SETUP_I3 == true ]; then
+    I3_CONFIG=${SCRIPT_DIR}/i3/i3-config
+    if [ $I3_NEO == true ]; then
+        I3_CONFIG=${I3_CONFIG}-neo
+    fi
     if backup ${HOME}/.config/i3/config; then
+	mkdir -p ${HOME}/.config/i3
         ln -s ${SCRIPT_DIR}/i3/i3-config ${HOME}/.config/i3/config
     fi
 
     if backup ${HOME}/.config/i3status/config; then
+	mkdir -p ${HOME}/.config/i3status
         ln -s ${SCRIPT_DIR}/i3/i3status-config ${HOME}/.config/i3status/config
     fi
   fi
+}
+
+# Setup powerline
+SETUP_POWERLINE=false
+function setup_powerline {
+  if [ $SETUP_POWERLINE == true ]; then
+      # Check if powerline was already setup
+      while read -r line
+      do
+          if (echo "$line" | grep --quiet "powerline-daemon"); then
+              SETUP_POWERLINE=false
+              echo "Powerline is already installed"
+              return 0
+          fi
+      done < "${HOME}/.bashrc"
+
+      pip2 install powerline-status powerline-gitstatus
+      if [ $? -ne 0 ]; then
+          echo "Failed to setup powerline"
+          exit 1
+      fi
+      PYTHON_USER_SITE=`python2 -m site --user-site`
+      echo "" >> ~/.bashrc
+      echo "# Powerline setup" >> ~/.bashrc
+      echo "powerline-daemon -q" >> ~/.bashrc
+      echo "POWERLINE_BASH_CONTINUATION=1" >> ~/.bashrc
+      echo "POWERLINE_BASH_SELECT=1" >> ~/.bashrc
+      echo "source ${PYTHON_USER_SITE}/powerline/bindings/bash/powerline.sh" >> ~/.bashrc
+
+      POWERLINE_THEME=${PYTHON_USER_SITE}/powerline/config_files/themes/shell/default.json
+      if [ ! -L ${POWERLINE_THEME} ]; then
+          mv ${POWERLINE_THEME} ${POWERLINE_THEME}.bak
+          ln -s ${SCRIPT_DIR}/powerline/theme.json ${POWERLINE_THEME}
+      fi
+
+      POWERLINE_COLORSCHEME=${PYTHON_USER_SITE}/powerline/config_files/colorschemes/shell/default.json
+      if [ ! -L ${POWERLINE_COLORSCHEME} ]; then
+          mv ${POWERLINE_COLORSCHEME} ${POWERLINE_COLORSCHEME}.bak
+          ln -s ${SCRIPT_DIR}/powerline/colorscheme.json ${POWERLINE_COLORSCHEME}
+      fi
+  fi
+}
+
+# Setup git
+SETUP_GIT=false
+function setup_git {
+    if [ $SETUP_GIT == true ]; then
+        git config --global alias.tree "log --graph --pretty=format:'%C(auto)%h %d %s %C(blue)%aN %C(yellow)%G? %C(white)%cr%C(auto)'"
+    fi
 }
 
 function print_help {
@@ -47,7 +103,7 @@ function print_help {
     echo ""
     echo "Creates symbolic links for the chosen programs from your home to the configuration files in this repository."
     echo ""
-    echo "  program - One or more of: vim, i3"
+    echo "  program - One or more of: vim, i3, i3-neo, powerline, git"
     echo ""
 }
 
@@ -64,6 +120,16 @@ do
         i3)
             SETUP_I3=true
         ;;
+        i3-neo)
+            SETUP_I3=true
+            I3_NEO=true
+        ;;
+        powerline)
+            SETUP_POWERLINE=true
+        ;;
+        git)
+            SETUP_GIT=true
+        ;;
 		*)
 			echo "Unknown parameter '$1'. Try --help for more information."
 		exit 1
@@ -78,3 +144,5 @@ fi
 
 setup_vim
 setup_i3
+setup_powerline
+setup_git
