@@ -44,6 +44,45 @@ function setup_i3 {
   fi
 }
 
+# Setup powerline
+function setup_powerline {
+  # Check if powerline was already setup
+  while read -r line
+  do
+      if (echo "$line" | grep --quiet "powerline-daemon"); then
+          SETUP_POWERLINE=false
+          echo "Powerline is already installed"
+          break
+      fi
+  done < "${HOME}/.bashrc"
+  if [ $SETUP_POWERLINE == true ]; then
+      pip2 install powerline-status powerline-gitstatus
+      if [ $? -ne 0 ]; then
+          echo "Failed to setup powerline"
+          exit 1
+      fi
+      PYTHON_USER_SITE=`python2 -m site --user-site`
+      echo "" >> ~/.bashrc
+      echo "# Powerline setup" >> ~/.bashrc
+      echo "powerline-daemon -q" >> ~/.bashrc
+      echo "POWERLINE_BASH_CONTINUATION=1" >> ~/.bashrc
+      echo "POWERLINE_BASH_SELECT=1" >> ~/.bashrc
+      echo "source ${PYTHON_USER_SITE}/powerline/bindings/bash/powerline.sh" >> ~/.bashrc
+
+      POWERLINE_THEME=${PYTHON_USER_SITE}/powerline/config_files/themes/shell/default.json
+      if [ ! -L ${POWERLINE_THEME} ]; then
+          mv ${POWERLINE_THEME} ${POWERLINE_THEME}.bak
+          ln -s ${SCRIPT_DIR}/powerline/theme.json ${POWERLINE_THEME}
+      fi
+
+      POWERLINE_COLORSCHEME=${PYTHON_USER_SITE}/powerline/config_files/colorschemes/shell/default.json
+      if [ ! -L ${POWERLINE_COLORSCHEME} ]; then
+          mv ${POWERLINE_COLORSCHEME} ${POWERLINE_COLORSCHEME}.bak
+          ln -s ${SCRIPT_DIR}/powerline/colorscheme.json ${POWERLINE_COLORSCHEME}
+      fi
+  fi
+}
+
 function print_help {
     echo "$0 program"
     echo ""
@@ -66,6 +105,9 @@ do
         i3)
             SETUP_I3=true
         ;;
+        powerline)
+            SETUP_POWERLINE=true
+        ;;
 		*)
 			echo "Unknown parameter '$1'. Try --help for more information."
 		exit 1
@@ -80,3 +122,4 @@ fi
 
 setup_vim
 setup_i3
+setup_powerline
