@@ -64,6 +64,8 @@ function setup_powerline {
           if (echo "$line" | grep --quiet "powerline-daemon"); then
               SETUP_POWERLINE=false
               echo "Powerline is already installed"
+              echo "Restarting"
+              powerline-daemon -q --replace
               return 0
           fi
       done < "${HOME}/.bashrc"
