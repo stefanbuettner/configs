@@ -73,6 +73,8 @@ set number
 set nocindent
 set nosmartindent
 
+set splitright
+
 " inoremap <S-Tab> "    "
 nnoremap <F1> :YcmCompleter GetType<CR>
 nnoremap <F2> :YcmCompleter GetDoc<CR>
