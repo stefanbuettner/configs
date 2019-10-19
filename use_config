@@ -108,6 +108,7 @@ SETUP_GIT=false
 function setup_git {
     if [ $SETUP_GIT == true ]; then
         git config --global alias.tree "log --graph --pretty=format:'%C(auto)%h %d %s %C(blue)%aN %C(yellow)%G? %C(white)%cr%C(auto)'"
+        echo ".vscode/" >> ${HOME}/.gitignore
     fi
 }
 
