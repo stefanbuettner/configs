@@ -46,10 +46,9 @@ function setup_i3 {
     fi
     ln -s ${I3_CONFIG} ${HOME}/.config/i3/config
 
-    if backup ${HOME}/.config/i3status/config; then
-	    mkdir -p ${HOME}/.config/i3status
-        ln -s ${SCRIPT_DIR}/i3/i3status-config ${HOME}/.config/i3status/config
-    fi
+    backup ${HOME}/.config/i3status/config
+	mkdir -p ${HOME}/.config/i3status
+    ${SCRIPT_DIR}/i3/configure-i3status.py ${SCRIPT_DIR}/i3/i3status-config-template ~/.config/i3status/config
     i3-msg --quiet reload
   fi
 }
