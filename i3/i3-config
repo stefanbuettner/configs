@@ -175,19 +175,5 @@ exec --no-startup-id blueman-applet
 # Use tabbed layout as default
 workspace_layout tabbed
 
-# Fix certain workspaces to certain screens
-workspace 1 output DP-4
-workspace 2 output DP-2
-workspace 3 output DP-4
-workspace 4 output DP-2
-
-# Start programs on specific workspace
-assign [class="Firefox"] → 1
-assign [class="Pidgin"] → 3
-assign [class="Thunderbird"] → 1
-#assign [class="Code"] → 2
-assign [class="X-terminal-emulator"] → 2
-assign [class="Steam"] → 4
-
 # Start programs as floating
 for_window [class="Gnome-calculator"] floating enable
