@@ -75,6 +75,12 @@ set nosmartindent
 
 set splitright
 
+set ffs=unix " Show DOS line endings as ^M
+
+function! FormatJSON()
+    silent %!python -m json.tool
+endfunction
+
 " inoremap <S-Tab> "    "
 nnoremap <F1> :YcmCompleter GetType<CR>
 nnoremap <F2> :YcmCompleter GetDoc<CR>
