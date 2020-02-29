@@ -49,7 +49,7 @@ function setup_i3 {
     backup ${HOME}/.config/i3status/config
 	mkdir -p ${HOME}/.config/i3status
     ${SCRIPT_DIR}/i3/configure-i3status.py ${SCRIPT_DIR}/i3/i3status-config-template ~/.config/i3status/config
-    i3-msg --quiet reload
+    i3-msg --quiet restart
   fi
 }
 
