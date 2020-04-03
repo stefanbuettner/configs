@@ -56,15 +56,17 @@ function setup_i3 {
 # Setup powerline
 SETUP_POWERLINE=false
 function setup_powerline {
+  PYTHON=python
+  PIP=pip
   if [ $SETUP_POWERLINE == true ]; then
-      PYTHON_USER_SITE=`python2 -m site --user-site`
+      PYTHON_USER_SITE=`${PYTHON} -m site --user-site`
 
-      if pip2 show --quiet powerline-status; then
+      if ${PIP} show --quiet powerline-status; then
           echo "Powerline is already installed"
           echo "Restarting"
           powerline-daemon -q --replace
       else
-        pip2 install powerline-status powerline-gitstatus
+        ${PIP} install powerline-status powerline-gitstatus
         if [ $? -ne 0 ]; then
             echo "Failed to setup powerline"
             return 1
