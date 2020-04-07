@@ -49,22 +49,34 @@ function setup_i3 {
     backup ${HOME}/.config/i3status/config
 	mkdir -p ${HOME}/.config/i3status
     ${SCRIPT_DIR}/i3/configure-i3status.py ${SCRIPT_DIR}/i3/i3status-config-template ~/.config/i3status/config
-    i3-msg --quiet reload
+    i3-msg --quiet restart
   fi
+}
+
+PYTHON=python
+PIP=pip
+
+function is_powerline_user_installed {
+    user_packages="$(${PIP} freeze --user)"
+    if [[ "${user_packages}" =~ "powerline-status" ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 # Setup powerline
 SETUP_POWERLINE=false
 function setup_powerline {
   if [ $SETUP_POWERLINE == true ]; then
-      PYTHON_USER_SITE=`python2 -m site --user-site`
+      PYTHON_USER_SITE=`${PYTHON} -m site --user-site`
 
-      if pip2 show --quiet powerline-status; then
+      if is_powerline_user_installed; then
           echo "Powerline is already installed"
           echo "Restarting"
           powerline-daemon -q --replace
       else
-        pip2 install powerline-status powerline-gitstatus
+        ${PIP} install powerline-status powerline-gitstatus
         if [ $? -ne 0 ]; then
             echo "Failed to setup powerline"
             return 1
@@ -72,16 +84,12 @@ function setup_powerline {
       fi
 
       POWERLINE_THEME=${PYTHON_USER_SITE}/powerline/config_files/themes/shell/default.json
-      if [ ! -L ${POWERLINE_THEME} ]; then
-          mv ${POWERLINE_THEME} ${POWERLINE_THEME}.bak
-          ln -s ${SCRIPT_DIR}/powerline/theme.json ${POWERLINE_THEME}
-      fi
+      backup ${POWERLINE_THEME}
+      cp ${SCRIPT_DIR}/powerline/theme.json ${POWERLINE_THEME}
 
       POWERLINE_COLORSCHEME=${PYTHON_USER_SITE}/powerline/config_files/colorschemes/shell/default.json
-      if [ ! -L ${POWERLINE_COLORSCHEME} ]; then
-          mv ${POWERLINE_COLORSCHEME} ${POWERLINE_COLORSCHEME}.bak
-          ln -s ${SCRIPT_DIR}/powerline/colorscheme.json ${POWERLINE_COLORSCHEME}
-      fi
+      backup ${POWERLINE_COLORSCHEME}
+      cp ${SCRIPT_DIR}/powerline/colorscheme.json ${POWERLINE_COLORSCHEME}
 
       SETUP_POWERLINE_BASH=true
       # Check if powerline was already setup
