@@ -84,16 +84,12 @@ function setup_powerline {
       fi
 
       POWERLINE_THEME=${PYTHON_USER_SITE}/powerline/config_files/themes/shell/default.json
-      if [ ! -L ${POWERLINE_THEME} ]; then
-          mv ${POWERLINE_THEME} ${POWERLINE_THEME}.bak
-          ln -s ${SCRIPT_DIR}/powerline/theme.json ${POWERLINE_THEME}
-      fi
+      backup ${POWERLINE_THEME}
+      cp ${SCRIPT_DIR}/powerline/theme.json ${POWERLINE_THEME}
 
       POWERLINE_COLORSCHEME=${PYTHON_USER_SITE}/powerline/config_files/colorschemes/shell/default.json
-      if [ ! -L ${POWERLINE_COLORSCHEME} ]; then
-          mv ${POWERLINE_COLORSCHEME} ${POWERLINE_COLORSCHEME}.bak
-          ln -s ${SCRIPT_DIR}/powerline/colorscheme.json ${POWERLINE_COLORSCHEME}
-      fi
+      backup ${POWERLINE_COLORSCHEME}
+      cp ${SCRIPT_DIR}/powerline/colorscheme.json ${POWERLINE_COLORSCHEME}
 
       SETUP_POWERLINE_BASH=true
       # Check if powerline was already setup
