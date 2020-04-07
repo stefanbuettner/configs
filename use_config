@@ -53,15 +53,25 @@ function setup_i3 {
   fi
 }
 
+PYTHON=python
+PIP=pip
+
+function is_powerline_user_installed {
+    user_packages="$(${PIP} freeze --user)"
+    if [[ "${user_packages}" =~ "powerline-status" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Setup powerline
 SETUP_POWERLINE=false
 function setup_powerline {
-  PYTHON=python
-  PIP=pip
   if [ $SETUP_POWERLINE == true ]; then
       PYTHON_USER_SITE=`${PYTHON} -m site --user-site`
 
-      if ${PIP} show --quiet powerline-status; then
+      if is_powerline_user_installed; then
           echo "Powerline is already installed"
           echo "Restarting"
           powerline-daemon -q --replace
