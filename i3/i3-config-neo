@@ -191,3 +191,4 @@ assign [class="Steam"] → 4
 
 # Start programs as floating
 for_window [class="Gnome-calculator"] floating enable
+for_window [window_type="notification"] floating enable
