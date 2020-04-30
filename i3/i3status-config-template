@@ -25,7 +25,9 @@ order += "disk /data/hdd1"
 order += "load"
 {cpu_temperature_orders}
 order += "battery all"
-order += "tztime local"
+order += "tztime date"
+order += "tztime Germany"
+order += "tztime China"
 
 wireless _first_ {{
         format_up = "W: (%quality at %essid) %ip"
@@ -50,8 +52,19 @@ run_watch VPN {{
         pidfile = "/var/run/vpnc/pid"
 }}
 
-tztime local {{
-        format = "📅 %d.%m.%Y %H:%M:%S"
+tztime date {{
+        format = "📅 %d.%m.%Y"
+        timezone = "UTC"
+}}
+
+tztime Germany {{
+        format = "🇩🇪 %H:%M:%S"
+        timezone = "Europe/Berlin"
+}}
+
+tztime China {{
+        format = "🇨🇳 %H:%M:%S"
+        timezone = "Asia/Harbin"
 }}
 
 {cpu_temperature_modules}
