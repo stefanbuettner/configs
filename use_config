@@ -54,7 +54,7 @@ function setup_i3 {
 }
 
 PYTHON=python
-PIP=pip
+PIP="${PYTHON} -m pip"
 
 function is_powerline_user_installed {
     user_packages="$(${PIP} freeze --user)"
