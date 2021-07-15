@@ -73,8 +73,6 @@ function setup_powerline {
 
       if is_powerline_user_installed; then
           echo "Powerline is already installed"
-          echo "Restarting"
-          powerline-daemon -q --replace
       else
         ${PIP} install powerline-status powerline-gitstatus
         if [ $? -ne 0 ]; then
@@ -107,6 +105,10 @@ function setup_powerline {
         echo "POWERLINE_BASH_SELECT=1" >> ~/.bashrc
         echo "source ${PYTHON_USER_SITE}/powerline/bindings/bash/powerline.sh" >> ~/.bashrc
       fi
+
+      # After updating the config, restart powerline
+      echo "Restarting powerline"
+      powerline-daemon -q --replace
   fi
 }
 
