@@ -1,3 +1,17 @@
 #!/bin/bash
-merged_branches=$(git for-each-ref --format='%(refname:short)' refs/heads/* --merged)
-git branch -d ${merged_branches}
+TARGET_BRANCH=master
+
+if [ -n "$1" ]; then
+    TARGET_BRANCH="$1"
+fi
+
+#merged_branches=$(git for-each-ref --format='%(refname:short)' refs/heads/* --merged=${TARGET_BRANCH})
+remote_branches=$(git branch -r --format='%(refname:strip=3)' | sort)
+local_branches=$(git branch --format='%(refname:strip=2)' | sort)
+for branch in $local_branches; do
+    [[ "$remote_branches" =~ "$branch" ]] && echo "Unmerged $branch" || merged_branches+=($branch)
+done
+
+if [ ${#merged_branches[@]} -gt 0 ]; then
+    git branch -D ${merged_branches[@]}
+fi
