@@ -1,0 +1,15 @@
+rsync --verbose --archive --compress --delete-after --delete-excluded\
+    --exclude 'build*/'\
+    --exclude 'Downloads'\
+    --exclude 'software'\
+    --exclude 'Nextcloud'\
+    --exclude 'Steam'\
+    --exclude 'VirtualBox VMs'\
+    --exclude 'cache'\
+    --exclude '.cache'\
+    --exclude '.ccache'\
+    --exclude 'venv'\
+    --exclude '.steam'\
+    --exclude '*SiSi_Highway*'\
+    --exclude '*.swp'\
+ $HOME/ /data/hdd1/$USER/backup
